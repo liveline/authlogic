@@ -99,7 +99,7 @@ module Authlogic
           if !record || !klass.column_names.include?("last_request_at")
             return false
           end
-          unless controller.last_request_update_allowed?
+          unless controller.last_request_update_allowed?(self)
             return false
           end
           record.last_request_at.blank? ||

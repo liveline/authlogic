@@ -73,9 +73,14 @@ module Authlogic
       #
       # See `authlogic/session/magic_columns.rb` to learn more about the
       # `last_request_at` column itself.
-      def last_request_update_allowed?
+      def last_request_update_allowed?(session)
         if controller.respond_to?(:last_request_update_allowed?, true)
-          controller.send(:last_request_update_allowed?)
+          case controller.method(:last_request_update_allowed?).arity
+          when 0
+            controller.send(:last_request_update_allowed?)
+          when 1
+            controller.send(:last_request_update_allowed?, session)
+          end
         else
           true
         end
